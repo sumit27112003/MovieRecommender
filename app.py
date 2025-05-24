@@ -115,7 +115,7 @@ if "detail" in st.session_state and st.session_state.detail:
 with st.container():
     st.markdown(
         """
-        <div style="background-color: rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 12px;">
+        <div style="background-color: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 12px;">
         """, unsafe_allow_html=True
     )
     col1, col2, col3 = st.columns([1, 2, 1])
