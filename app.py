@@ -20,7 +20,7 @@ st.markdown("""
 }
 
 .block-container {
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.6);
     padding: 2rem;
     border-radius: 1rem;
     flex-grow: 1;
