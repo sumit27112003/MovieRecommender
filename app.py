@@ -6,39 +6,43 @@ import pickle
 # Configure page
 st.set_page_config(page_title="Movie Recommender", layout="wide")
 
-# Set background image using CSS
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-image: url("https://user-images.githubusercontent.com/86877457/132905471-3ef27af4-ecc6-44bf-a47c-5ccf2250410c.jpg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
+# Set background image and layout
+st.markdown("""
+<style>
+.stApp {
+    background-image: url("https://user-images.githubusercontent.com/86877457/132905471-3ef27af4-ecc6-44bf-a47c-5ccf2250410c.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-    /* Optional: Make content background slightly transparent for readability */
-    .block-container {
-        background-color: rgba(0, 0, 0, 0.8);
-        padding: 2rem;
-        border-radius: 1rem;
-    }
+.block-container {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 2rem;
+    border-radius: 1rem;
+    flex-grow: 1;
+}
 
-    h1, h2, h3, h4, h5, h6, p, .stButton > button {
-        color: white;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+footer {
+    margin-top: auto;
+}
 
+h1, h2, h3, h4, h5, h6, p, .stButton > button {
+    color: white;
+}
+</style>
+""", unsafe_allow_html=True)
 
-
+# Title
 st.markdown("<h1 style='text-align: center; color: white;'>🎬 Movie Recommender System</h1>", unsafe_allow_html=True)
 
+# API Key for TMDB
 API_KEY = "630aff2f83c506eb9e3ebdd523a1876c"
 
-# Function to fetch movie details
+# Fetch movie details
 def fetch_movie_details(movie_id):
     try:
         url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US"
@@ -73,13 +77,13 @@ movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
 
-# UI: Movie selector
+# Selectbox
 selected_movie = st.selectbox("🎞️ Select a movie to get recommendations:", movies['title'].values)
 
-# Store recommendation in session state
+# Button
 if st.button("Recommend"):
     st.session_state.recommendations = recommend(selected_movie)
-    st.session_state.detail = None  # Clear previous detail
+    st.session_state.detail = None
 
 # Show recommendations
 if "recommendations" in st.session_state:
@@ -100,9 +104,25 @@ if "recommendations" in st.session_state:
 if "detail" in st.session_state and st.session_state.detail:
     detail = st.session_state.detail
     st.markdown("----")
-    st.image(detail["poster"], use_column_width=False, width=300)
+    st.image(detail["poster"], use_container_width=False, width=300)
     st.markdown(f"### {detail['title']}")
     st.markdown(f"**📅 Release Date:** {detail['release_date']}")
     st.markdown(f"**⭐ Rating:** {detail['rating']}")
     st.markdown(f"**📝 Overview:** {detail['overview']}")
     st.markdown("----")
+
+# Footer (reliable and visible)
+with st.container():
+    st.markdown(
+        """
+        <div style="background-color: rgba(0, 0, 0, 0.6); padding: 20px; border-radius: 12px;">
+        """, unsafe_allow_html=True
+    )
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("### 🎬 Movie Recommender App", unsafe_allow_html=True)
+        st.markdown("**Created by Sumit Rajak**")
+        st.markdown("Built with Streamlit, TMDB API, and Python")
+        st.markdown("[🐙 GitHub](https://github.com/sumitrajak27112003) | [🔗 LinkedIn](https://linkedin.com/in/sumit-rajak-8b51b4296) | [📷 Instagram](https://instagram.com/_sumit2711)")
+        st.caption("© 2025 | Educational use only | Movie data courtesy of TMDB")
+    st.markdown("</div>", unsafe_allow_html=True)
